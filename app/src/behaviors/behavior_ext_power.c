@@ -25,9 +25,9 @@ on_keymap_binding_convert_central_state_dependent_params(struct zmk_behavior_bin
     switch (binding->param2) {
     case EXT_PWR:
         device_node_name = "EXT_POWER";
-    case EXT_PWR:
+    case RGB_PWR:
         device_node_name = "RGB_PWR";
-    case:
+    case OLED_PWR:
         device_node_name = "OLED_PWR";
     default:
         device_node_name = "EXT_POWER";
