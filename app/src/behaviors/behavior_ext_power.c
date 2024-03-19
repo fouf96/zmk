@@ -21,10 +21,20 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 static int
 on_keymap_binding_convert_central_state_dependent_params(struct zmk_behavior_binding *binding,
                                                          struct zmk_behavior_binding_event event) {
-
-    const struct device *ext_power = device_get_binding(binding->param2);
+    const char *device_node_name;
+    switch (binding->param2) {
+    case EXT_PWR:
+        device_node_name = "EXT_POWER";
+    case RGB_PWR:
+        device_node_name = "RGB_PWR";
+    case OLED_PWR:
+        device_node_name = "OLED_PWR";
+    default:
+        device_node_name = "EXT_POWER";
+    }
+    const struct device *ext_power = device_get_binding(device_node_name);
     if (ext_power == NULL) {
-        LOG_ERR("Unable to retrieve ext_power device: %d", binding->param1);
+        LOG_ERR("Unable to retrieve ext_power device: %d", device_node_name);
         return -EIO;
     }
 
@@ -38,9 +48,20 @@ on_keymap_binding_convert_central_state_dependent_params(struct zmk_behavior_bin
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
 
-    const struct device *ext_power = device_get_binding(binding->param2);
+    const char *device_node_name;
+    switch (binding->param2) {
+    case EXT_PWR:
+        device_node_name = "EXT_POWER";
+    case RGB_PWR:
+        device_node_name = "RGB_PWR";
+    case OLED_PWR:
+        device_node_name = "OLED_PWR";
+    default:
+        device_node_name = "EXT_POWER";
+    }
+    const struct device *ext_power = device_get_binding(device_node_name);
     if (ext_power == NULL) {
-        LOG_ERR("Unable to retrieve ext_power device: %d", binding->param1);
+        LOG_ERR("Unable to retrieve ext_power device: %d", device_node_name);
         return -EIO;
     }
 
