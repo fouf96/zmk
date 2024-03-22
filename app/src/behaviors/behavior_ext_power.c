@@ -77,7 +77,7 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
 static int behavior_ext_power_init(const struct device *dev) { return 0; };
 
 static const struct behavior_ext_power_config behavior_ext_power_config = {
-    .power_node_name = DT_INST_PROP(0, power_node_name)
+    .power_node_name = DT_INST_PROP_OR(0, power_node_name, "EXT_POWER")
     };
 
 static const struct behavior_driver_api behavior_ext_power_driver_api = {
