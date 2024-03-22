@@ -6,3 +6,8 @@ description: External power control Behavior
 compatible: "zmk,behavior-ext-power"
 
 include: one_param.yaml
+
+properties:
+  power-node-name:
+    type: string
+    required: true
