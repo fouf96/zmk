@@ -21,18 +21,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 static int
 on_keymap_binding_convert_central_state_dependent_params(struct zmk_behavior_binding *binding,
                                                          struct zmk_behavior_binding_event event) {
-    const char *device_node_name;
-    switch (binding->param2) {
-    case EXT_PWR:
-        device_node_name = "EXT_POWER";
-    case RGB_PWR:
-        device_node_name = "EXT_POWER";
-    case OLED_PWR:
-        device_node_name = "EXT_POWER";
-    default:
-        device_node_name = "EXT_POWER";
-    }
-    const struct device *ext_power = device_get_binding(device_node_name);
+
+    const struct device *ext_power = device_get_binding(binding->behavior_dev);
     if (ext_power == NULL) {
         LOG_ERR("Unable to retrieve ext_power device: %d", binding->param1);
         return -EIO;
@@ -48,18 +38,7 @@ on_keymap_binding_convert_central_state_dependent_params(struct zmk_behavior_bin
 static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
                                      struct zmk_behavior_binding_event event) {
 
-    const char *device_node_name;
-    switch (binding->param2) {
-    case EXT_PWR:
-        device_node_name = "EXT_POWER";
-    case RGB_PWR:
-        device_node_name = "EXT_POWER";
-    case OLED_PWR:
-        device_node_name = "EXT_POWER";
-    default:
-        device_node_name = "EXT_POWER";
-    }
-    const struct device *ext_power = device_get_binding(device_node_name);
+    const struct device *ext_power = device_get_binding(binding->behavior_dev);
     if (ext_power == NULL) {
         LOG_ERR("Unable to retrieve ext_power device: %d", binding->param1);
         return -EIO;
@@ -97,13 +76,13 @@ static const struct behavior_driver_api behavior_ext_power_driver_api = {
     .locality = BEHAVIOR_LOCALITY_GLOBAL,
 };
 
-// BEHAVIOR_DT_INST_DEFINE(0, behavior_ext_power_init, NULL, NULL, NULL, POST_KERNEL,
-//                         CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_ext_power_driver_api);
+BEHAVIOR_DT_INST_DEFINE(0, behavior_ext_power_init, NULL, NULL, NULL, POST_KERNEL,
+                        CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_ext_power_driver_api);
 
-#define EXT_POWER_INST(n)                                                                          \
-    BEHAVIOR_DT_INST_DEFINE(n, behavior_ext_power_init, NULL, NULL, NULL, POST_KERNEL,             \
-                            CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_ext_power_driver_api);
+// #define EXT_POWER_INST(n)                                                                          \
+//     BEHAVIOR_DT_INST_DEFINE(n, behavior_ext_power_init, NULL, NULL, NULL, POST_KERNEL,             \
+//                             CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_ext_power_driver_api);
 
-DT_INST_FOREACH_STATUS_OKAY(EXT_POWER_INST)
+// DT_INST_FOREACH_STATUS_OKAY(EXT_POWER_INST)
 
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */

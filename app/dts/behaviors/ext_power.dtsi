@@ -9,7 +9,15 @@
         // Behavior can be invoked on peripherals, so name must be <= 8 characters.
         ext_power: extpower {
             compatible = "zmk,behavior-ext-power";
-            #binding-cells = <2>;
+            #binding-cells = <1>;
         };
+    //     rgb_pwr: rgbpwr {
+    //         compatible = "zmk,behavior-ext-power";
+    //         #binding-cells = <1>;
+    //     };
+    //     oled_pwr: oledpwr {
+    //         compatible = "zmk,behavior-ext-power";
+    //         #binding-cells = <1>;
+    //     };
     };
 };
