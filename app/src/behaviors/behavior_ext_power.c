@@ -28,7 +28,7 @@ on_keymap_binding_convert_central_state_dependent_params(struct zmk_behavior_bin
     const struct device *dev = zmk_behavior_get_binding(binding->behavior_dev);
     const struct behavior_ext_power_config *cfg = dev->config;
 
-    const struct device *ext_power = device_get_binding(&cfg->power_node_name);
+    const struct device *ext_power = device_get_binding(cfg->power_node_name);
     if (ext_power == NULL) {
         LOG_ERR("Unable to retrieve ext_power device: %d", binding->param1);
         return -EIO;
@@ -46,7 +46,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     const struct device *dev = zmk_behavior_get_binding(binding->behavior_dev);
     const struct behavior_ext_power_config *cfg = dev->config;
 
-    const struct device *ext_power = device_get_binding(&cfg->power_node_name);
+    const struct device *ext_power = device_get_binding(cfg->power_node_name);
     if (ext_power == NULL) {
         LOG_ERR("Unable to retrieve ext_power device: %d", binding->param1);
         return -EIO;
