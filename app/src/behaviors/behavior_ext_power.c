@@ -76,10 +76,7 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
 
 static int behavior_ext_power_init(const struct device *dev) { return 0; };
 
-static const struct behavior_ext_power_config behavior_ext_power_config = {
-    .power_node_name = DT_INST_PROP_OR(0, power_node_name, "EXT_POWER")
-    };
-
+// ? do we have to put the api into the KP_INST(n) as well?
 static const struct behavior_driver_api behavior_ext_power_driver_api = {
     .binding_convert_central_state_dependent_params =
         on_keymap_binding_convert_central_state_dependent_params,
@@ -88,7 +85,14 @@ static const struct behavior_driver_api behavior_ext_power_driver_api = {
     .locality = BEHAVIOR_LOCALITY_GLOBAL,
 };
 
-BEHAVIOR_DT_INST_DEFINE(0, behavior_ext_power_init, NULL, NULL, &behavior_ext_power_config, POST_KERNEL,
-                        CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_ext_power_driver_api);
+#define KP_INST(n)   
+    static struct behavior_ext_power_config behavior_ext_power_config_#nn = {
+    .power_node_name = DT_INST_PROP_OR(n, power_node_name, "EXT_POWER")
+    };
+
+    BEHAVIOR_DT_INST_DEFINE(n, behavior_ext_power_init, NULL, NULL, &behavior_ext_power_config_#nn, POST_KERNEL,
+                            CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_ext_power_driver_api);
+
+DT_INST_FOREACH_STATUS_OKAY(KP_INST)
 
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */
