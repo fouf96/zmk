@@ -10,7 +10,7 @@
         ext_power: extpower {
             compatible = "zmk,behavior-ext-power";
             #binding-cells = <1>;
-            power-node-name = "FOO_BAR";
+            power-node-name = "RGB_PWR";
         };
     };
 };
