@@ -86,11 +86,11 @@ static const struct behavior_driver_api behavior_ext_power_driver_api = {
 };
 
 #define KP_INST(n)   
-    static struct behavior_ext_power_config behavior_ext_power_config_#nn = {
+    static struct behavior_ext_power_config behavior_ext_power_config_##n = {
     .power_node_name = DT_INST_PROP_OR(n, power_node_name, "EXT_POWER")
     };
 
-    BEHAVIOR_DT_INST_DEFINE(n, behavior_ext_power_init, NULL, NULL, &behavior_ext_power_config_#nn, POST_KERNEL,
+    BEHAVIOR_DT_INST_DEFINE(n, behavior_ext_power_init, NULL, NULL, &behavior_ext_power_config_##n, POST_KERNEL,
                             CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_ext_power_driver_api);
 
 DT_INST_FOREACH_STATUS_OKAY(KP_INST)
