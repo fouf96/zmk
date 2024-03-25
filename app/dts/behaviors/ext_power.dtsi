@@ -10,7 +10,7 @@
         ext_power: extpower {
             compatible = "zmk,behavior-ext-power";
             #binding-cells = <1>;
-            power-node-name = "EXT_POWER";
+            power-node-name = "OLED_PWR";
         };
     };
 };
