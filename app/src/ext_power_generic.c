@@ -195,7 +195,7 @@ static const struct ext_power_api api = {.enable = ext_power_generic_enable,
 #define ZMK_EXT_POWER_INIT_PRIORITY 81
 
 #define GPWR_INST(n)                                                                               \
-    static const struct ext_power_generic_config config_##n = {                                    \
+    static struct ext_power_generic_config config_##n = {                                          \
         .control = GPIO_DT_SPEC_INST_GET(n, control_gpios),                                        \
         .init_delay_ms = DT_INST_PROP_OR(n, init_delay_ms, 0)};                                    \
                                                                                                    \
