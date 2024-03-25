@@ -195,13 +195,18 @@ static const struct ext_power_api api = {.enable = ext_power_generic_enable,
         .init_delay_ms = DT_INST_PROP_OR(n, init_delay_ms, 0)                    \
     };
 
+#if IS_ENABLED(CONFIG_SETTINGS)                                                  
 #define EXT_POWER_DATA(n)                                                        \
     static struct ext_power_generic_data data_##n = {                            \
         .status = false,                                                         \
-#if IS_ENABLED(CONFIG_SETTINGS)                                                  \
         .settings_init = false,                                                  \
-#endif                                                                           \
     };
+#else
+#define EXT_POWER_DATA(n)                                                        \
+    static struct ext_power_generic_data data_##n = {                            \
+        .status = false,                                                         \
+    };
+#endif                                                                           \
 
 #define EXT_POWER_DEVICE_DEFINE(n)                                               \
     PM_DEVICE_DT_INST_DEFINE(n, ext_power_generic_pm_action);                    \
