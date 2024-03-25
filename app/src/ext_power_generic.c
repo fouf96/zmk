@@ -181,12 +181,7 @@ static int ext_power_generic_pm_action(const struct device *dev, enum pm_device_
 }
 #endif /* CONFIG_PM_DEVICE */
 
-static struct ext_power_generic_data data = {
-    .status = false,
-#if IS_ENABLED(CONFIG_SETTINGS)
-    .settings_init = false,
-#endif
-};
+
 
 static const struct ext_power_api api = {.enable = ext_power_generic_enable,
                                          .disable = ext_power_generic_disable,
@@ -194,15 +189,29 @@ static const struct ext_power_api api = {.enable = ext_power_generic_enable,
 
 #define ZMK_EXT_POWER_INIT_PRIORITY 81
 
-#define GPWR_INST(n)                                                                               \
-    static struct ext_power_generic_config config_##n = {                                          \
-        .control = GPIO_DT_SPEC_INST_GET(n, control_gpios),                                        \
-        .init_delay_ms = DT_INST_PROP_OR(n, init_delay_ms, 0)};                                    \
-                                                                                                   \
-    PM_DEVICE_DT_INST_DEFINE(n, ext_power_generic_pm_action);                                      \
-    DEVICE_DT_INST_DEFINE(n, ext_power_generic_init, PM_DEVICE_DT_INST_GET(n), &data, &config_##n, \
-                          POST_KERNEL, ZMK_EXT_POWER_INIT_PRIORITY, &api);
+#define EXT_POWER_CONFIG(n)                                                      \
+    static struct ext_power_generic_config config_##n = {                  \
+        .control = GPIO_DT_SPEC_INST_GET(n, control_gpios),                      \
+        .init_delay_ms = DT_INST_PROP_OR(n, init_delay_ms, 0)                    \
+    };
 
-DT_INST_FOREACH_STATUS_OKAY(GPWR_INST)
+#define EXT_POWER_DATA(n)                                                        \
+    static struct ext_power_generic_data data_##n = {                            \
+        .status = false,                                                         \
+#if IS_ENABLED(CONFIG_SETTINGS)                                                  \
+        .settings_init = false,                                                  \
+#endif                                                                           \
+    };
+
+#define EXT_POWER_DEVICE_DEFINE(n)                                               \
+    PM_DEVICE_DT_INST_DEFINE(n, ext_power_generic_pm_action);                    \
+    DEVICE_DT_INST_DEFINE(n, ext_power_generic_init, PM_DEVICE_DT_INST_GET(n),   \
+                          &data_##n, &config_##n, POST_KERNEL,                   \
+                          ZMK_EXT_POWER_INIT_PRIORITY, &api);
+
+// Create config, data, and define device for each instance
+DT_INST_FOREACH_STATUS_OKAY(EXT_POWER_CONFIG)
+DT_INST_FOREACH_STATUS_OKAY(EXT_POWER_DATA)
+DT_INST_FOREACH_STATUS_OKAY(EXT_POWER_DEVICE_DEFINE)
 
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */
