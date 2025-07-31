@@ -282,8 +282,15 @@ menuconfig ZMK_RGB_UNDERGLOW
 
 if ZMK_RGB_UNDERGLOW
 
+
+config ZMK_RGB_UNDERGLOW_DEFAULT_POWER_DOMAIN
+    bool "Auto-assign the RGB underglow to the default power domain"
+    default y
+    depends on ZMK_POWER_DOMAINS_DYNAMIC_DEFAULT
+
 config ZMK_RGB_UNDERGLOW_EXT_POWER
     bool "RGB underglow toggling also controls external power"
+    depends on !ZMK_POWER_DOMAINS
 
 config ZMK_RGB_UNDERGLOW_BRT_MIN
     int "RGB underglow minimum brightness in percent"
@@ -398,21 +405,39 @@ config ZMK_SLEEP
     depends on HAS_POWEROFF
     select POWEROFF
     select ZMK_PM_DEVICE_SUSPEND_RESUME
+    select PM_DEVICE
     imply USB
-
-if ZMK_SLEEP
-
-config PM_DEVICE
-    default y
 
 config ZMK_IDLE_SLEEP_TIMEOUT
     int "Milliseconds of inactivity before entering deep sleep"
+    depends on ZMK_SLEEP
     default 900000
 
-endif # ZMK_SLEEP
+
+config ZMK_POWER_DOMAINS
+    bool "Enable automatic power domain handling"
+    select PM_DEVICE
+    select PM_DEVICE_POWER_DOMAIN
+    select PM_DEVICE_RUNTIME
+    select POWER_DOMAIN
+    select POWER_DOMAIN_GPIO
+
+config ZMK_POWER_DOMAINS_DYNAMIC_DEFAULT
+    bool "Enable assigning peripherals to the chosen default power domain"
+    depends on ZMK_POWER_DOMAINS
+    select PM_DEVICE_POWER_DOMAIN_DYNAMIC
+    select DEVICE_DEPS_DYNAMIC
+
+if ZMK_POWER_DOMAINS_DYNAMIC_DEFAULT
+
+config PM_DEVICE_POWER_DOMAIN_DYNAMIC_NUM
+    int
+
+endif
 
 config ZMK_EXT_POWER
     bool "Enable support to control external power output"
+    depends on !ZMK_POWER_DOMAINS
 
 config ZMK_PM
     bool

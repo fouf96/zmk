@@ -49,6 +49,9 @@ if ZMK_RGB_UNDERGLOW
 config SPI
     default y
 
+config ZMK_RGB_UNDERGLOW_DEFAULT_POWER_DOMAIN
+    default y
+
 config ZMK_RGB_UNDERGLOW_EXT_POWER
     default y
 
@@ -104,6 +107,14 @@ endif # ZMK_BACKLIGHT
 # Ext_power
 config ZMK_EXT_POWER
     default y
+
+if ZMK_POWER_DOMAINS_DYNAMIC_DEFAULT
+
+# Default this to 2, the most common scenario for this for ZMK is RGB + OLED
+config PM_DEVICE_POWER_DOMAIN_DYNAMIC_NUM
+    default 2
+
+endif # ZMK_POWER_DOMAINS_DYNAMIC_DEFAULT
 
 # Battery
 config ZMK_BATTERY_REPORT_INTERVAL
